@@ -1,34 +1,39 @@
-package com.leords.client.entities;
+package com.leords.client.dto;
 
-import javax.persistence.*;
+import com.leords.client.entities.Client;
+
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Objects;
 
-@Entity
-@Table(name = "tb_client")
-public class Client implements Serializable {
+public class ClientDTO implements Serializable {
     
-    private static final long serialVersionUID = 4600588437827065669L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private static final long serialVersionUID = -5520188759303802865L;
     private Long id;
     private String name;
     private String cpf;
     private Double income;
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant birthDate;
     private Integer children;
     
-    public Client() {
+    public ClientDTO() {
     }
     
-    public Client(Long id, String name, Double income, Instant birthDate, Integer children) {
+    public ClientDTO(Long id, String name, String cpf, Double income, Instant birthDate, Integer children) {
         this.id = id;
         this.name = name;
+        this.cpf = cpf;
         this.income = income;
         this.birthDate = birthDate;
         this.children = children;
+    }
+    
+    public ClientDTO(Client entity) {
+        id = entity.getId();
+        name = entity.getName();
+        cpf = entity.getCpf();
+        income = entity.getIncome();
+        birthDate = entity.getBirthDate();
+        children = entity.getChildren();
     }
     
     public Long getId() {
@@ -77,19 +82,6 @@ public class Client implements Serializable {
     
     public void setChildren(Integer children) {
         this.children = children;
-    }
-    
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Client client = (Client) o;
-        return getId().equals(client.getId());
-    }
-    
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
     }
     
 }
