@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping(value = "/clients")
@@ -32,6 +33,29 @@ public class ClientResource {
     public ResponseEntity<ClientDTO> findClientById(@PathVariable(value = "id") Long id) {
         var clientDto = service.findClientById(id);
         return ResponseEntity.ok().body(clientDto);
+    }
+    
+    @PostMapping
+    public ResponseEntity<ClientDTO> createClient(@RequestBody ClientDTO dto) {
+        dto = service.createClient(dto);
+        var uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(dto.getId())
+                .toUri();
+        return ResponseEntity.created(uri).body(dto);
+    }
+    
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<ClientDTO> updateClient(@PathVariable(value = "id") Long id, @RequestBody ClientDTO dto) {
+        dto = service.updateClient(id, dto);
+        return ResponseEntity.ok().body(dto);
+    }
+    
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteClientById(@PathVariable(value = "id") Long id) {
+        service.deleteClientById(id);
+        return ResponseEntity.ok().build();
     }
     
 }
